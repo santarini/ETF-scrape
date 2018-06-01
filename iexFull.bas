@@ -619,27 +619,34 @@ Range("G4").Value = AssetBStD
 Range("G5").Value = MainRng.Value / (AssetAStD * AssetBStD)
 Range("G6").Value = MainRng.Value
 
-Columns("C:C").Select
-Selection.Insert Shift:=xlToRight, CopyOrigin:=xlFormatFromLeftOrAbove
-Range("C1").Value = "Asset Weights"
-For i = 1 To DataRowCount
-    DataLabel = AssetAName & " " & Format(Range("C1").Offset(i, -2).Value, "Percent") & ", " & AssetBName & " " & Format(Range("C1").Offset(i, -1).Value, "Percent")
-    Range("C1").Offset(i, 0).Value = DataLabel
-Next
-Columns("C:C").Select
-With Selection
-    .WrapText = False
-End With
+'Columns("C:C").Select
+'Selection.Insert Shift:=xlToRight, CopyOrigin:=xlFormatFromLeftOrAbove
+'Range("C1").Value = "Asset Weights"
+'For i = 1 To DataRowCount
+    'DataLabel = AssetAName & " " & Format(Range("C1").Offset(i, -2).Value, "Percent") & ", " & AssetBName & " " & Format(Range("C1").Offset(i, -1).Value, "Percent")
+    'Range("C1").Offset(i, 0).Value = DataLabel
+'Next
+'Columns("C:C").Select
+'With Selection
+'    .WrapText = False
+'End With
 Rows("1:1").Select
 With Selection
     .WrapText = False
 End With
-Columns("A:B").Delete
+'Columns("A:B").Delete
+
+Columns("A:A").Select
+Selection.Insert Shift:=xlToRight, CopyOrigin:=xlFormatFromLeftOrAbove
+Range("A1").Value = "ID"
+For i = 1 To DataRowCount
+    Range("A1").Offset(i, 0).Value = Chr(i + 64)
+Next
 
     ActiveSheet.Shapes.AddChart2(240, xlXYScatterSmooth).Select
     ActiveChart.SeriesCollection.NewSeries
-    ActiveChart.FullSeriesCollection(1).XValues = "=Portfolio!$C$2:$C$" & (DataRowCount + 1)
-    ActiveChart.FullSeriesCollection(1).Values = "=Portfolio!$B$2:$B$" & (DataRowCount + 1)
+    ActiveChart.FullSeriesCollection(1).XValues = "=Portfolio!$E$2:$E$" & (DataRowCount + 1)
+    ActiveChart.FullSeriesCollection(1).Values = "=Portfolio!$D$2:$D$" & (DataRowCount + 1)
     ActiveChart.HasTitle = True
     ActiveChart.ChartTitle.Text = "Efficient Frontier"
     With ActiveChart.Axes(xlValue)
@@ -678,16 +685,16 @@ Dim OptimalRng As Range
 
 riskFreeRate = InputBox("What is the Risk Free Rate?", "Risk Free Rate of Return", 1)
 
-CovAB = Range("F5").Value
-CorrAB = Range("F6").Value
+CovAB = Range("G5").Value
+CorrAB = Range("G6").Value
 
-AReturn = Range("F2").Value
-AVar = Range("F3").Value
-AStDev = Range("F4").Value
+AReturn = Range("G2").Value
+AVar = Range("G3").Value
+AStDev = Range("G4").Value
 
-BReturn = Range("G2").Value
-BVar = Range("G3").Value
-BStDev = Range("G4").Value
+BReturn = Range("H2").Value
+BVar = Range("H3").Value
+BStDev = Range("H4").Value
 
 AOptimalW = (((AReturn - riskFreeRate) * BVar) - ((BReturn - riskFreeRate) * CovAB)) / ((((AReturn - riskFreeRate) * BVar) + ((BReturn - riskFreeRate) * AVar)) - ((AReturn - riskFreeRate + BReturn - riskFreeRate) * CovAB))
 BOptimalW = 1 - AOptimalW
@@ -699,11 +706,12 @@ Range("A1").Select
 Selection.End(xlDown).Select
 Selection.Offset(1, 0).Select
 Set OptimalRng = Selection
-OptimalRng.Value = AOptimalW
-OptimalRng.Offset(0, 1).Value = BOptimalW
-OptimalRng.Offset(0, 2).Value = PortfolioReturn
-OptimalRng.Offset(0, 3).Value = PortfolioStdDev
-OptimalRng.Select
+OptimalRng.Value = "Optimal"
+OptimalRng.Offset(0, 1).Value = AOptimalW
+OptimalRng.Offset(0, 2).Value = BOptimalW
+OptimalRng.Offset(0, 3).Value = PortfolioReturn
+OptimalRng.Offset(0, 4).Value = PortfolioStdDev
+OptimalRng.Offset(0, 1).Select
 Range(Selection, Selection.End(xlToRight)).Select
 Selection.NumberFormat = "0.00%"
 Selection.Interior.Color = RGB(255, 255, 204)
