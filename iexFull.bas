@@ -144,7 +144,7 @@ Function manipulateDataIEX()
     Range("H1").Value = "Intraday Open to Close"
     Application.CutCopyMode = False
     Range("H2").Select
-    ActiveCell.FormulaR1C1 = "=RC[-2]/RC[-5]-1"
+    ActiveCell.FormulaR1C1 = "=RC[-2]-RC[-5]"
     Range("I1").Value = "Intraday %"
     Range("I2").Select
     Application.CutCopyMode = False
@@ -182,6 +182,7 @@ Dim useableData As Range
     Range(Selection, Selection.End(xlToRight)).Select
     Set useableData = Selection
     str = RngNoPath & "(Mon)!R3C1"
+    Range("A1").Select
     
     Sheets.Add.Name = RngNoPath & "(Mon)"
     
@@ -282,6 +283,9 @@ Next
     Columns("C:C").Select
     Selection.Style = "Percent"
     Selection.NumberFormat = "0.000%"
+    
+'re-center A1
+    Range("A1").Select
     
 
 End Function
