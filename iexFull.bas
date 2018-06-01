@@ -677,6 +677,31 @@ OptimalRng.Value = AOptimalW
 OptimalRng.Offset(0, 1).Value = BOptimalW
 OptimalRng.Offset(0, 2).Value = PortfolioReturn
 OptimalRng.Offset(0, 3).Value = PortfolioStdDev
+OptimalRng.Select
+Range(Selection, Selection.End(xlToRight)).Select
+Selection.NumberFormat = "0.00%"
+Selection.Interior.Color = RGB(255, 255, 204)
 
+
+ActiveSheet.ChartObjects("Chart 1").Activate
+ActiveChart.SeriesCollection.NewSeries
+ActiveChart.FullSeriesCollection(3).XValues = OptimalRng.Offset(0, 3)
+ActiveChart.FullSeriesCollection(3).Values = OptimalRng.Offset(0, 2)
+ActiveSheet.ChartObjects("Chart 1").Activate
+ActiveChart.FullSeriesCollection(3).Select
+ActiveChart.FullSeriesCollection(3).Points(1).Select
+With Selection.Format.Fill
+    .Visible = msoTrue
+    .ForeColor.RGB = RGB(0, 176, 80)
+    .Transparency = 0
+    .Solid
+End With
+With Selection.Format.Line
+    .Visible = msoTrue
+    .ForeColor.RGB = RGB(0, 176, 80)
+    .Transparency = 0
+End With
+
+Range("A1").Select
 
 End Function
