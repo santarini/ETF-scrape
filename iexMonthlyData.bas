@@ -35,6 +35,8 @@ Dim PTRowCount As Integer
 'set cell to Rng
 
     Set PTTop = Selection
+    PTTop.Value = "Month"
+    
 
 'select content to bottom
     Range(Selection, Selection.End(xlDown)).Select
@@ -93,5 +95,15 @@ For Each cell In PTMons
         cell.EntireRow.Delete
     End If
 Next
+
+'delete the top rows
+    Rows("1:2").Delete
+
+'format the data
+    
+    Columns("C:C").Select
+    Selection.Style = "Percent"
+    Selection.NumberFormat = "0.000%"
+    
 
 End Sub
