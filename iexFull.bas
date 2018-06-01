@@ -511,7 +511,7 @@ Cells.EntireRow.AutoFit
 Range("A1").Select
 
 End Function
-                                                                                    Function createPortfolio()
+Function createPortfolio()
 
 Dim MainRng As Range
 Dim AssetA, AssetB As Range
@@ -548,7 +548,7 @@ Selection.End(xlToLeft).Select
 Set AssetB = Selection
 
 'extract asset b data
-AssetBName = Split(AssetA.Value, Chr(181))(0)
+AssetBName = Split(AssetB.Value, Chr(181))(0)
 
 openPos = InStr(AssetB, Chr(181))
 closePos = InStr(AssetB, "%")
@@ -579,9 +579,15 @@ Range(Selection, Selection.End(xlDown)).Select
 
 Selection.NumberFormat = "0%"
 
-Range("C1").Value = AssetAName
+Range("C1").Value = "Portfolio Return"
+Range("D1").Value = "Portfolio StDev"
 
-Range("D1").Value = AssetBName
+For i = 1 To 11
+    AWeight = Range("A1").Offset(i, 0).Value
+    BWeight = Range("B1").Offset(i, 0).Value
+    PortfolioReturn = (AWeight * AssetBReturn) + (BWeight * AssetBReturn)
+    PortfolioStdDev = ((AWeight * AssetAStD) ^ 2) + ((BWeight * AssetBStD) ^ 2) + (2 * AWeight * BWeight * MainRng.Value * AssetAStD * AssetBStD)
+Next
 
 
 End Function
