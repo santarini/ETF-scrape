@@ -517,7 +517,7 @@ Dim MainRng As Range
 Dim AssetA, AssetB As Range
 Dim AssetAName, AssetBName As String
 Dim AssetAReturn, AssetBReturn, AssetAStD, AssetBStD As Double
-Dim openPos, closePos As Integer
+Dim openPos, closePos, DataRowCount As Integer
 
 
 Set MainRng = Selection
@@ -585,8 +585,8 @@ Range("D1").Value = "Portfolio StDev"
 For i = 1 To 11
     AWeight = Range("A1").Offset(i, 0).Value
     BWeight = Range("B1").Offset(i, 0).Value
-    PortfolioReturn = (AWeight * AssetAReturn) + (BWeight * AssetBReturn)
-    PortfolioStdDev = Sqr(((AWeight * AssetAStD) ^ 2) + ((BWeight * AssetBStD) ^ 2) + (2 * AWeight * BWeight * MainRng.Value * AssetAStD * AssetBStD))
+    PortfolioReturn = (AWeight * AssetAReturn) + (BWeight * AssetBReturn) / 100
+    PortfolioStdDev = Sqr(((AWeight * AssetAStD) ^ 2) + ((BWeight * AssetBStD) ^ 2) + (2 * AWeight * BWeight * MainRng.Value * AssetAStD * AssetBStD)) / 100
     Range("C1").Offset(i, 0).Value = PortfolioReturn
     Range("D1").Offset(i, 0).Value = PortfolioStdDev
 Next
@@ -594,11 +594,11 @@ Next
 Range("C2:D2").Select
 Range(Selection, Selection.End(xlDown)).Select
 
-DataRowCount = Selection.RowCount
-
-
 Selection.NumberFormat = "0%"
 
+DataRowCount = Selection.Rows.count
+
+    ActiveSheet.Shapes.AddChart2(240, xlXYScatterSmooth).Select
     ActiveChart.SeriesCollection.NewSeries
     ActiveChart.FullSeriesCollection(1).XValues = "=Portfolio!$D$2:$D$" & DataRowCount
     ActiveChart.FullSeriesCollection(1).Values = "=Portfolio!$C$2:$C$" & DataRowCount
