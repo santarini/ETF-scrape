@@ -508,7 +508,44 @@ Cells.EntireColumn.AutoFit
 Cells.EntireRow.AutoFit
 
 'reset selectio
-Range("A1").Select
+
+Range("B1").Select
+Range(Selection, Selection.End(xlToRight)).Select
+Set HeaderRng = Selection
+
+For Each cell In HeaderRng
+openPos = InStr(cell, "=")
+closePos = InStr(cell, "%")
+AssetBReturn = Mid(cell, openPos + 1, closePos - openPos - 1)
+If AssetBReturn <= 0 Then
+    cell.Font.Color = RGB(255, 0, 0)
+End If
+
+If AssetBReturn >= 0 Then
+    cell.Font.Color = RGB(0, 255, 0)
+End If
+
+Next
+
+Range("A2").Select
+Range(Selection, Selection.End(xlDown)).Select
+Set HeaderRng = Selection
+
+For Each cell In HeaderRng
+openPos = InStr(cell, "=")
+closePos = InStr(cell, "%")
+AssetBReturn = Mid(cell, openPos + 1, closePos - openPos - 1)
+If AssetBReturn <= 0 Then
+    cell.Font.Color = RGB(255, 0, 0)
+End If
+
+If AssetBReturn >= 0 Then
+    cell.Font.Color = RGB(0, 190, 0)
+End If
+Next
+
+Range("A2").Select
+
 
 End Function
 Function createPortfolio()
@@ -726,13 +763,13 @@ ActiveChart.FullSeriesCollection(3).Select
 ActiveChart.FullSeriesCollection(3).Points(1).Select
 With Selection.Format.Fill
     .Visible = msoTrue
-    .ForeColor.RGB = RGB(0, 176, 80)
+    .ForeColor.RGB = RGB(255, 0, 0)
     .Transparency = 0
     .Solid
 End With
 With Selection.Format.Line
     .Visible = msoTrue
-    .ForeColor.RGB = RGB(0, 176, 80)
+    .ForeColor.RGB = RGB(255, 0, 0)
     .Transparency = 0
 End With
 
