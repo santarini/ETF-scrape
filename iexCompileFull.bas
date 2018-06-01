@@ -89,6 +89,8 @@ For FileNumber = 1 To Count 'you can change count to a constant for sample runs
     Set Rng = ActiveCell
     
 Next FileNumber
+
+Worksheets("PathSet").Delete
                                         
 'tell me how long it took
 SecondsElapsed = Round(Timer - StartTime, 2)
@@ -159,5 +161,8 @@ Function manipulateDataIEX()
     'resize one last time
     Range("A:I").Select
     Selection.Columns.AutoFit
+    
+    'set active cell to home
+    Range("A1").Select
    
 End Function
