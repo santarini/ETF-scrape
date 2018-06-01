@@ -587,6 +587,8 @@ For i = 1 To 11
     BWeight = Range("B1").Offset(i, 0).Value
     PortfolioReturn = (AWeight * AssetBReturn) + (BWeight * AssetBReturn)
     PortfolioStdDev = ((AWeight * AssetAStD) ^ 2) + ((BWeight * AssetBStD) ^ 2) + (2 * AWeight * BWeight * MainRng.Value * AssetAStD * AssetBStD)
+    Range("C1").Offset(0, i).Value = PortfolioReturn
+    Range("D1").Offset(0, i).Value = PortfolioStdDev
 Next
 
 
