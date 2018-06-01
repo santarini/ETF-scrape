@@ -568,8 +568,8 @@ Range("B1").Value = "Asset B Weight"
 j = 1
 k = 0
 For i = 1 To 11
-    Range("A1").Offset(i, 0).Value = j
-    Range("B1").Offset(i, 0).Value = k
+    Range("A1").Offset(i, 0).Value = k
+    Range("B1").Offset(i, 0).Value = j
     j = j - 0.1
     k = k + 0.1
 Next
@@ -591,6 +591,17 @@ For i = 1 To 11
     Range("D1").Offset(i, 0).Value = PortfolioStdDev
 Next
 
+Range("C2:D2").Select
+Range(Selection, Selection.End(xlDown)).Select
 
+DataRowCount = Selection.RowCount
+
+
+Selection.NumberFormat = "0%"
+
+    ActiveChart.SeriesCollection.NewSeries
+    ActiveChart.FullSeriesCollection(1).XValues = "=Portfolio!$D$2:$D$" & DataRowCount
+    ActiveChart.FullSeriesCollection(1).Values = "=Portfolio!$C$2:$C$" & DataRowCount
+    ActiveChart.ChartTitle.Delete
 End Function
 
