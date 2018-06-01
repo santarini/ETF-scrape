@@ -98,7 +98,7 @@ Worksheets("PathSet").Delete
 MainWB.Sheets.Add.Name = "MonthSummary"
 MainWB.Sheets.Add.Name = "DailySummary"
 
-Worksheets("DailySummary").Activate
+Worksheets("MonthSummary").Activate
 Range("A1").Value = "Ticker"
 Range("A2").Value = "Average"
 Range("A3").Value = "Variance"
@@ -108,15 +108,15 @@ For Each CurrentSheet In Worksheets
     If InStr(1, CurrentSheet.Name, "(Mon)") > 0 Then
         CurrentSheet.Activate
         SheetName = CurrentSheet.Name
-        Call dailySummary(SheetName)
-        CurrentSheet.Activate
-    End If
-    If InStr(1, CurrentSheet.Name, "(D)") > 0 Then
-        CurrentSheet.Activate
-        SheetName = CurrentSheet.Name
         Call monthlySummary(SheetName)
         CurrentSheet.Activate
     End If
+    'If InStr(1, CurrentSheet.Name, "(D)") > 0 Then
+    '    CurrentSheet.Activate
+    '    SheetName = CurrentSheet.Name
+    '    Call dailySummary(SheetName)
+    '    CurrentSheet.Activate
+    'End If
 Next
                                         
 'tell me how long it took
@@ -350,13 +350,13 @@ Function monthlySummary(SheetName As String)
     MonthlyVariance = MonthlyStandardDeviation * MonthlyStandardDeviation
 
 'worksheet dailySummary select
-    Worksheets("DailySummary").Activate
+    Worksheets("MonthSummary").Activate
     Range("A1").Select
     If IsEmpty(Range("A1").Offset(0, 1)) Then
         Range("B1").Select
     Else
-        'Move right
-        'Move one cell right
+        Selection.End(xlToRight).Select
+        Selection.Offset(0, 1).Select
     End If
     
     ActiveCell.Value = SheetName
