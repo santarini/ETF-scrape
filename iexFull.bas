@@ -619,11 +619,21 @@ Range("G4").Value = AssetBStD
 Range("G5").Value = MainRng.Value / (AssetAStD * AssetBStD)
 Range("G6").Value = MainRng.Value
 
+Columns("C:C").Select
+Selection.Insert Shift:=xlToRight, CopyOrigin:=xlFormatFromLeftOrAbove
+Range("C1").Select
+For i = 1 To DataRowCount
+    DataLabel = AssetAName & " " & Format(Range("C1").Offset(i, -2).Value, "Percent") & ", " & AssetBName & " " & Format(Range("C1").Offset(i, -1).Value, "Percent")
+    Range("C1").Offset(i, 0).Value = DataLabel
+Next
+
+
+
 
     ActiveSheet.Shapes.AddChart2(240, xlXYScatterSmooth).Select
     ActiveChart.SeriesCollection.NewSeries
-    ActiveChart.FullSeriesCollection(1).XValues = "=Portfolio!$D$2:$D$" & DataRowCount
-    ActiveChart.FullSeriesCollection(1).Values = "=Portfolio!$C$2:$C$" & DataRowCount
+    ActiveChart.FullSeriesCollection(1).XValues = "=Portfolio!$D$2:$D$" & (DataRowCount + 1)
+    ActiveChart.FullSeriesCollection(1).Values = "=Portfolio!$C$2:$C$" & (DataRowCount + 1)
     ActiveChart.HasTitle = True
     ActiveChart.ChartTitle.Text = "Efficient Frontier"
     With ActiveChart.Axes(xlValue)
