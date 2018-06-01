@@ -380,7 +380,7 @@ county = 1
 For Each Basesheet In Worksheets
     If InStr(1, Basesheet.Name, "(Mon)") > 0 Then
         Worksheets("MonthlyCorr").Select
-        topCell.Offset(0, countx).Value = Basesheet.Name
+        topCell.Offset(0, countx).Value = Split(Basesheet.Name, "(")(0)
         
         Basesheet.Activate
         
@@ -423,7 +423,7 @@ For Each Basesheet In Worksheets
                                 Worksheets("MonthlyCorr").Select
                                 
                             'paste corrData name in row
-                                topCell.Offset(county, 0).Value = CurrentSheet.Name
+                                topCell.Offset(county, 0).Value = Split(CurrentSheet.Name, "(")(0)
                                 
                             'paste correlation
                                 topCell.Offset(county, countx).Value = CorrelationVar
