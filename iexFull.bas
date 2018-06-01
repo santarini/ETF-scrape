@@ -3,7 +3,7 @@ Sub compileByPath()
 Dim FolderPath As String
 Dim PathCountCondition As String
 Dim FileName As String
-Dim Count As Integer
+Dim count As Integer
 Dim FileNumber As Integer
 Dim MainWB As Workbook
 Dim WB As Workbook
@@ -39,7 +39,7 @@ FileName = Dir(PathCountCondition)
 Do While FileName <> ""
     Rng.Value = FileName
     Rng.Offset(1, 0).Select
-    Count = Count + 1
+    count = count + 1
     Set Rng = ActiveCell
     FileName = Dir()
 Loop
@@ -48,12 +48,12 @@ Worksheets("PathSet").Activate
 Set Rng = Range("A1")
 Rng.Select
 Range(Selection, Selection.End(xlDown)).Select
-Count = Selection.Rows.Count
+count = Selection.Rows.count
 
 Worksheets("PathSet").Activate
 Rng.Select
 
-For FileNumber = 1 To Count 'you can change count to a constant for sample runs
+For FileNumber = 1 To count 'you can change count to a constant for sample runs
     
     'open the file
     
@@ -121,7 +121,7 @@ Next
                                         
 'tell me how long it took
 SecondsElapsed = Round(Timer - StartTime, 2)
-tickersPerSec = Round(SecondsElapsed / Count, 2)
+tickersPerSec = Round(SecondsElapsed / count, 2)
 MsgBox "This code ran successfully in " & SecondsElapsed & " seconds" & vbCrLf & "Approximately " & tickersPerSec & " per second", vbInformation
                                         
 End Sub
@@ -156,7 +156,7 @@ Function manipulateDataIEX()
     
     Range("A1").Select
     Range(Selection, Selection.End(xlDown)).Select
-    LastRow = Selection.Rows.Count
+    LastRow = Selection.Rows.count
     
     'day average average
     Range("G1").Value = "Day Average"
@@ -368,16 +368,75 @@ Function monthlySummary(SheetName As String)
 End Function
 Function MonthCorrelate()
 
-Sheets.Add.Name = "MonthlyCorr"
+Dim baseData, corrData, topCell As Range
+Dim countx, county As Integer
+Dim CorrelationVar As Double
 
-For Each CurrentSheet In Worksheets
-    If InStr(1, CurrentSheet.Name, "(Mon)") > 0 Then
-        CurrentSheet.Activate
-        'SheetName = Split(CurrentSheet.Name, "(")(0)
-        'Call monthlySummary(SheetName)
-        CurrentSheet.Activate
+Sheets.Add.Name = "MonthlyCorr"
+Set topCell = Range("A1")
+countx = 1
+county = 1
+
+For Each Basesheet In Worksheets
+    If InStr(1, Basesheet.Name, "(Mon)") > 0 Then
+        Worksheets("MonthlyCorr").Select
+        topCell.Offset(0, countx).Value = Basesheet.Name
+        
+        Basesheet.Activate
+        
+        'find "Sum of Intraday"
+        
+            Cells.Find(What:="Sum of Intraday", After:=ActiveCell, LookIn:=xlFormulas _
+                , LookAt:=xlPart, SearchOrder:=xlByRows, SearchDirection:=xlNext, _
+                MatchCase:=False, SearchFormat:=False).Activate
+        
+        'select data beneath
+            
+            Selection.Offset(1, 0).Select
+            Range(Selection, Selection.End(xlDown)).Select
+            
+        'selection equals usableData
+            Set baseData = Selection
+                
+                For Each CurrentSheet In Worksheets
+                    If InStr(1, CurrentSheet.Name, "(Mon)") > 0 Then
+                            CurrentSheet.Activate
+    
+                            'find "Sum of Intraday"
+                            
+                                Cells.Find(What:="Sum of Intraday", After:=ActiveCell, LookIn:=xlFormulas _
+                                    , LookAt:=xlPart, SearchOrder:=xlByRows, SearchDirection:=xlNext, _
+                                    MatchCase:=False, SearchFormat:=False).Activate
+                            
+                            'select data beneath
+                                
+                                Selection.Offset(1, 0).Select
+                                Range(Selection, Selection.End(xlDown)).Select
+                                
+                            'selection equals usableData
+                                Set corrData = Selection
+                                
+                            'find correlation
+                                CorrelationVar = Application.WorksheetFunction.Correl(baseData, corrData)
+                                
+                            'navigate to "MonthlyCorr"
+                                Worksheets("MonthlyCorr").Select
+                                
+                            'paste corrData name in row
+                                topCell.Offset(county, 0).Value = CurrentSheet.Name
+                                
+                            'paste correlation
+                                topCell.Offset(county, countx).Value = CorrelationVar
+                                county = county + 1
+                    
+                    End If
+                Next
+            county = 1
+            countx = countx + 1
+        Basesheet.Activate
     End If
 Next
+Worksheets("MonthlyCorr").Activate
 
 
 End Function
