@@ -371,6 +371,7 @@ Function MonthCorrelate()
 Dim baseData, corrData, topCell As Range
 Dim countx, county As Integer
 Dim CorrelationVar As Double
+Dim str As String
 
 Sheets.Add.Name = "MonthlyCorr"
 Set topCell = Range("A1")
@@ -380,7 +381,8 @@ county = 1
 For Each Basesheet In Worksheets
     If InStr(1, Basesheet.Name, "(Mon)") > 0 Then
         Worksheets("MonthlyCorr").Select
-        topCell.Offset(0, countx).Value = Split(Basesheet.Name, "(")(0)
+        str = Split(Basesheet.Name, "(")(0) & Chr(181) & ChrW(&H3C3)
+        topCell.Offset(0, countx).Value = str
         
         Basesheet.Activate
         
