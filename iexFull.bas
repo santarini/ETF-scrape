@@ -647,6 +647,8 @@ End Function
 Function optimalPortfolio()
 
 Dim riskFreeRate As Double
+Dim OptimalRng As Range
+
 
 riskFreeRate = InputBox("What is the Risk Free Rate?", "Risk Free Rate of Return", 1)
 
@@ -661,11 +663,24 @@ BReturn = Range("F2").Value
 BVar = Range("F3").Value
 BStDev = Range("F4").Value
 
+AOptimalW = (((AReturn - riskFreeRate) * BVar) - ((BReturn - riskFreeRate) * CovAB)) / ((((AReturn - riskFreeRate) * BVar) + ((BReturn - riskFreeRate) * AVar)) - ((AReturn - riskFreeRate + BReturn - riskFreeRate) * CovAB))
+BOptimalW = 1 - AOptimalW
+
+PortfolioReturn = ((AOptimalW * AReturn) + (BOptimalW * BReturn))
+PortfolioStdDev = Sqr(((AOptimalW * AStDev) ^ 2) + ((BOptimalW * BStDev) ^ 2) + (2 * AOptimalW * BOptimalW * CorrAB * AStDev * BStDev))
+
 Range("A1").Select
 Selection.End(xlDown).Select
 Selection.Offset(1, 0).Select
+Set OptimalRng = Selection
+OptimalRng.Value = AOptimalW
+OptimalRng.Offset(0, 1).Value = BOptimalW
+OptimalRng.Offset(0, 2).Value = PortfolioReturn
+PortfolioStdDev
 
-AOptimalW = (((AReturn - riskFreeRate) * BVar) - ((BReturn - riskFreeRate) * CovAB)) / ((((AReturn - riskFreeRate) * BVar) + ((BReturn - riskFreeRate) * AVar)) - ((AReturn - riskFreeRate + BReturn - riskFreeRate) * CovAB))
+
+
+
 
 
 
