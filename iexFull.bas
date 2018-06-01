@@ -526,7 +526,6 @@ If AssetReturn >= 0 Then
 End If
 Next
 
-Next
 
 Range("A2").Select
 Range(Selection, Selection.End(xlDown)).Select
@@ -723,6 +722,9 @@ Dim OptimalRng As Range
 
 riskFreeRate = InputBox("What is the Risk Free Rate?", "Risk Free Rate of Return", 1)
 
+Range("F8").Value = "Risk Free Rate"
+Range("G8").Value = riskFreeRate
+
 CovAB = Range("G5").Value
 CorrAB = Range("G6").Value
 
@@ -762,18 +764,51 @@ ActiveChart.FullSeriesCollection(3).Values = OptimalRng.Offset(0, 3)
 ActiveSheet.ChartObjects("Chart 1").Activate
 ActiveChart.FullSeriesCollection(3).Select
 ActiveChart.FullSeriesCollection(3).Points(1).Select
+ActiveChart.FullSeriesCollection(3).Select
+With Selection.Format.Line
+    .Visible = msoTrue
+    .ForeColor.RGB = RGB(255, 0, 0)
+    .Transparency = 0
+End With
 With Selection.Format.Fill
     .Visible = msoTrue
     .ForeColor.RGB = RGB(255, 0, 0)
     .Transparency = 0
     .Solid
 End With
-With Selection.Format.Line
-    .Visible = msoTrue
-    .ForeColor.RGB = RGB(255, 0, 0)
-    .Transparency = 0
-End With
 
 Range("A1").Select
+
+End Function
+Function CapitalAllocationLine()
+
+Range("A1").Select
+Selection.End(xlDown).Select
+Set OptimalRng = Selection
+
+Range("I1").Value = "Risky Weight"
+Range("J1").Value = "RFR Weight"
+
+j = 1
+k = 0
+For i = 1 To 16
+    Range("K1").Offset(i, 0).Value = k
+    Range("L1").Offset(i, 0).Value = j
+    PortfolioReturn = ((k * AReturn) + (j * BReturn))
+    PortfolioStdDev = Sqr(((AOptimalW * AStDev) ^ 2) + ((BOptimalW * BStDev) ^ 2) + (2 * AOptimalW * BOptimalW * CorrAB * AStDev * BStDev))
+    
+    j = j - 0.1
+    k = k + 0.1
+Next
+
+Range("I2:J2").Select
+Range(Selection, Selection.End(xlDown)).Select
+
+Selection.NumberFormat = "0%"
+
+Range("K1").Value = "Return Portfolio"
+Range("L1").Value = "Portfolio StDev"
+
+
 
 End Function
