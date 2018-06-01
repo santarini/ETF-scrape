@@ -380,9 +380,6 @@ county = 1
 
 For Each Basesheet In Worksheets
     If InStr(1, Basesheet.Name, "(Mon)") > 0 Then
-        Worksheets("MonthlyCorr").Select
-        str = Split(Basesheet.Name, "(")(0) & Chr(181) & ChrW(&H3C3)
-        topCell.Offset(0, countx).Value = str
         
         Basesheet.Activate
         
@@ -399,6 +396,19 @@ For Each Basesheet In Worksheets
             
         'selection equals usableData
             Set baseData = Selection
+
+        'get average and stddev of selection
+        
+            BaseArithmeticMean = Application.WorksheetFunction.Average(baseData)
+            BaseStandardDeviation = Application.WorksheetFunction.StDev_P(baseData)
+        
+        'paste stats into monthsummary
+            
+            Worksheets("MonthlyCorr").Select
+            str = Split(Basesheet.Name, "(")(0) & " " & Chr(181) & "=" & Format(BaseArithmeticMean, "Percent") & " " & ChrW(&H3C3) & "=" & Format(BaseStandardDeviation, "Percent")
+            topCell.Offset(0, countx).Value = str
+            
+
                 
                 For Each CurrentSheet In Worksheets
                     If InStr(1, CurrentSheet.Name, "(Mon)") > 0 Then
@@ -418,6 +428,11 @@ For Each Basesheet In Worksheets
                             'selection equals usableData
                                 Set corrData = Selection
                                 
+                            'get average and stddev of selection
+        
+                                TrgtArithmeticMean = Application.WorksheetFunction.Average(corrData)
+                                TrgtStandardDeviation = Application.WorksheetFunction.StDev_P(corrData)
+                                
                             'find correlation
                                 CorrelationVar = Application.WorksheetFunction.Correl(baseData, corrData)
                                 
@@ -425,7 +440,8 @@ For Each Basesheet In Worksheets
                                 Worksheets("MonthlyCorr").Select
                                 
                             'paste corrData name in row
-                                topCell.Offset(county, 0).Value = Split(CurrentSheet.Name, "(")(0)
+                                str = Split(CurrentSheet.Name, "(")(0) & " " & Chr(181) & "=" & Format(TrgtArithmeticMean, "Percent") & " " & ChrW(&H3C3) & "=" & Format(TrgtStandardDeviation, "Percent")
+                                topCell.Offset(county, 0).Value = str
                                 
                             'paste correlation
                                 topCell.Offset(county, countx).Value = CorrelationVar
@@ -439,6 +455,8 @@ For Each Basesheet In Worksheets
     End If
 Next
 Worksheets("MonthlyCorr").Activate
-
+Cells.Select
+Cells.EntireColumn.AutoFit
+Range("A1").Select
 
 End Function
