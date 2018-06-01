@@ -511,3 +511,77 @@ Cells.EntireRow.AutoFit
 Range("A1").Select
 
 End Function
+                                                                                    Function createPortfolio()
+
+Dim MainRng As Range
+Dim AssetA, AssetB As Range
+Dim AssetAName, AssetBName As String
+Dim AssetAReturn, AssetBReturn, AssetAStD, AssetBStD As Double
+Dim openPos, closePos As Integer
+
+
+Set MainRng = Selection
+
+'get asset a
+Selection.End(xlUp).Select
+Set AssetA = Selection
+
+
+'extract asset a data
+AssetAName = Split(AssetA.Value, Chr(181))(0)
+
+openPos = InStr(AssetA, Chr(181))
+closePos = InStr(AssetA, "%")
+AssetAReturn = Mid(AssetA, openPos + 2, closePos - openPos - 1)
+
+openPos = InStr(1, AssetA, "=")
+openPos = InStr(openPos + 1, AssetA, "=")
+closePos = InStr(1, AssetA, "%")
+closePos = InStr(closePos + 1, AssetA, "%")
+AssetAStD = Mid(AssetA, openPos + 1, closePos - openPos - 1)
+
+
+MainRng.Select
+
+'get asset b
+Selection.End(xlToLeft).Select
+Set AssetB = Selection
+
+'extract asset b data
+AssetBName = Split(AssetA.Value, Chr(181))(0)
+
+openPos = InStr(AssetB, Chr(181))
+closePos = InStr(AssetB, "%")
+AssetBReturn = Mid(AssetB, openPos + 2, closePos - openPos - 1)
+
+openPos = InStr(1, AssetB, "=")
+openPos = InStr(openPos + 1, AssetB, "=")
+closePos = InStr(1, AssetB, "%")
+closePos = InStr(closePos + 1, AssetB, "%")
+AssetBStD = Mid(AssetB, openPos + 1, closePos - openPos - 1)
+
+Sheets.Add.Name = "Portfolio"
+
+Range("A1").Value = "Asset A Weight"
+Range("B1").Value = "Asset B Weight"
+
+j = 1
+k = 0
+For i = 1 To 11
+    Range("A1").Offset(i, 0).Value = j
+    Range("B1").Offset(i, 0).Value = k
+    j = j - 0.1
+    k = k + 0.1
+Next
+
+Range("A2:B2").Select
+Range(Selection, Selection.End(xlDown)).Select
+
+Selection.NumberFormat = "0%"
+
+Range("C1").Value = AssetAName
+
+Range("D1").Value = AssetBName
+
+
+End Function
