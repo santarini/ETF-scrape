@@ -28,7 +28,7 @@ Set Rng = Range("A1")
 Application.DisplayAlerts = False
 
 'define folder path
-FolderPath = "C:\Users\CommandCenter\Desktop\ETF-scrape-master\stock_dfs"
+FolderPath = "C:\Users\m4k04\Desktop\workspace\workspace2\historical-price-statistics-clone\stock_dfs"
 
 'count number of CSVs in folder
 
@@ -598,6 +598,27 @@ Selection.NumberFormat = "0%"
 
 DataRowCount = Selection.Rows.count
 
+Range("E1").Value = "Individual Stats"
+Range("E2").Value = "Average Return"
+Range("E3").Value = "Variance"
+Range("E4").Value = "StDev"
+Range("E5").Value = "Cov"
+Range("E6").Value = "Corr"
+
+Range("F1").Value = AssetAName
+Range("F2").Value = AssetAReturn
+Range("F3").Value = (AssetAStD * AssetAStD)
+Range("F4").Value = AssetAStD
+Range("F5").Value = MainRng.Value / (AssetAStD * AssetBStD)
+Range("F6").Value = MainRng.Value
+
+Range("G1").Value = AssetBName
+Range("G2").Value = AssetBReturn
+Range("G3").Value = (AssetBStD * AssetBStD)
+Range("G4").Value = AssetBStD
+Range("G5").Value = MainRng.Value / (AssetAStD * AssetBStD)
+Range("G6").Value = MainRng.Value
+
     ActiveSheet.Shapes.AddChart2(240, xlXYScatterSmooth).Select
     ActiveChart.SeriesCollection.NewSeries
     ActiveChart.FullSeriesCollection(1).XValues = "=Portfolio!$D$2:$D$" & DataRowCount
@@ -614,6 +635,12 @@ DataRowCount = Selection.Rows.count
      .HasTitle = True
      .AxisTitle.Caption = "Portfolio " & ChrW(&H3C3)
     End With
+    
+Cells.Select
+Selection.Columns.AutoFit
+Selection.Rows.AutoFit
+
+Range("A1").Select
     
 End Function
 
