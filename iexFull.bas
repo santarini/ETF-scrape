@@ -666,7 +666,7 @@ Next
 
     ActiveChart.FullSeriesCollection(1).DataLabels.Select
     ActiveChart.SeriesCollection(1).DataLabels.Format.TextFrame2.TextRange. _
-        InsertChartField msoChartFieldRange, "=Portfolio!$A$2:$A$12", 0
+        InsertChartField msoChartFieldRange, "=Portfolio!$A$2:$A$" & (DataRowCount + 1), 0
     Selection.ShowRange = True
     Selection.ShowValue = False
     
@@ -719,8 +719,8 @@ Selection.Interior.Color = RGB(255, 255, 204)
 
 ActiveSheet.ChartObjects("Chart 1").Activate
 ActiveChart.SeriesCollection.NewSeries
-ActiveChart.FullSeriesCollection(3).XValues = OptimalRng.Offset(0, 3)
-ActiveChart.FullSeriesCollection(3).Values = OptimalRng.Offset(0, 2)
+ActiveChart.FullSeriesCollection(3).XValues = OptimalRng.Offset(0, 4)
+ActiveChart.FullSeriesCollection(3).Values = OptimalRng.Offset(0, 3)
 ActiveSheet.ChartObjects("Chart 1").Activate
 ActiveChart.FullSeriesCollection(3).Select
 ActiveChart.FullSeriesCollection(3).Points(1).Select
