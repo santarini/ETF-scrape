@@ -621,19 +621,25 @@ Range("G6").Value = MainRng.Value
 
 Columns("C:C").Select
 Selection.Insert Shift:=xlToRight, CopyOrigin:=xlFormatFromLeftOrAbove
-Range("C1").Select
+Range("C1").Value = "Asset Weights"
 For i = 1 To DataRowCount
     DataLabel = AssetAName & " " & Format(Range("C1").Offset(i, -2).Value, "Percent") & ", " & AssetBName & " " & Format(Range("C1").Offset(i, -1).Value, "Percent")
     Range("C1").Offset(i, 0).Value = DataLabel
 Next
-
-
-
+Columns("C:C").Select
+With Selection
+    .WrapText = False
+End With
+Rows("1:1").Select
+With Selection
+    .WrapText = False
+End With
+Columns("A:B").Delete
 
     ActiveSheet.Shapes.AddChart2(240, xlXYScatterSmooth).Select
     ActiveChart.SeriesCollection.NewSeries
-    ActiveChart.FullSeriesCollection(1).XValues = "=Portfolio!$D$2:$D$" & (DataRowCount + 1)
-    ActiveChart.FullSeriesCollection(1).Values = "=Portfolio!$C$2:$C$" & (DataRowCount + 1)
+    ActiveChart.FullSeriesCollection(1).XValues = "=Portfolio!$C$2:$C$" & (DataRowCount + 1)
+    ActiveChart.FullSeriesCollection(1).Values = "=Portfolio!$B$2:$B$" & (DataRowCount + 1)
     ActiveChart.HasTitle = True
     ActiveChart.ChartTitle.Text = "Efficient Frontier"
     With ActiveChart.Axes(xlValue)
@@ -646,6 +652,15 @@ Next
      .HasTitle = True
      .AxisTitle.Caption = "Portfolio " & ChrW(&H3C3)
     End With
+    ActiveSheet.ChartObjects("Chart 1").Activate
+    ActiveChart.FullSeriesCollection(1).Select
+    ActiveChart.SetElement (msoElementDataLabelTop)
+
+    
+    ActiveChart.FullSeriesCollection(1).DataLabels.Select
+    ActiveChart.SeriesCollection(1).DataLabels.Format.TextFrame2.TextRange. _
+        InsertChartField msoChartFieldRange, "=Portfolio!$A$2:$A$" & (DataRowCount + 1), 0
+    Selection.ShowRange = True
     
 Cells.Select
 Selection.Columns.AutoFit
