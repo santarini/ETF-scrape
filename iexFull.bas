@@ -619,6 +619,7 @@ Range("G4").Value = AssetBStD
 Range("G5").Value = MainRng.Value / (AssetAStD * AssetBStD)
 Range("G6").Value = MainRng.Value
 
+
     ActiveSheet.Shapes.AddChart2(240, xlXYScatterSmooth).Select
     ActiveChart.SeriesCollection.NewSeries
     ActiveChart.FullSeriesCollection(1).XValues = "=Portfolio!$D$2:$D$" & DataRowCount
@@ -643,4 +644,31 @@ Selection.Rows.AutoFit
 Range("A1").Select
     
 End Function
+Function optimalPortfolio()
 
+Dim riskFreeRate As Double
+
+riskFreeRate = InputBox("What is the Risk Free Rate?", "Risk Free Rate of Return", 1)
+
+CovAB = Range("F5").Value
+CorrAB = Range("F6").Value
+
+AReturn = Range("F2").Value
+AVar = Range("F3").Value
+AStDev = Range("F4").Value
+
+BReturn = Range("F2").Value
+BVar = Range("F3").Value
+BStDev = Range("F4").Value
+
+Range("A1").Select
+Selection.End(xlDown).Select
+Selection.Offset(1, 0).Select
+
+AOptimalW = (((AReturn - riskFreeRate) * BVar) - ((BReturn - riskFreeRate) * CovAB)) / ((((AReturn - riskFreeRate) * BVar) + ((BReturn - riskFreeRate) * AVar)) - ((AReturn - riskFreeRate + BReturn - riskFreeRate) * CovAB))
+
+
+
+
+
+End Function
