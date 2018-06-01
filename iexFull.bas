@@ -366,3 +366,18 @@ Function monthlySummary(SheetName As String)
     ActiveCell.Offset(3, 0).Value = MonthlyVariance
 
 End Function
+Function MonthCorrelate()
+
+Sheets.Add.Name = "MonthlyCorr"
+
+For Each CurrentSheet In Worksheets
+    If InStr(1, CurrentSheet.Name, "(Mon)") > 0 Then
+        CurrentSheet.Activate
+        'SheetName = Split(CurrentSheet.Name, "(")(0)
+        'Call monthlySummary(SheetName)
+        CurrentSheet.Activate
+    End If
+Next
+
+
+End Function
