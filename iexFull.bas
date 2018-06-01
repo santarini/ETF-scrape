@@ -532,13 +532,13 @@ AssetAName = Split(AssetA.Value, Chr(181))(0)
 
 openPos = InStr(AssetA, Chr(181))
 closePos = InStr(AssetA, "%")
-AssetAReturn = Mid(AssetA, openPos + 2, closePos - openPos - 2)
+AssetAReturn = Mid(AssetA, openPos + 2, closePos - openPos - 2) / 100
 
 openPos = InStr(1, AssetA, "=")
 openPos = InStr(openPos + 1, AssetA, "=")
 closePos = InStr(1, AssetA, "%")
 closePos = InStr(closePos + 1, AssetA, "%")
-AssetAStD = Mid(AssetA, openPos + 1, closePos - openPos - 2)
+AssetAStD = Mid(AssetA, openPos + 1, closePos - openPos - 2) / 100
 
 
 MainRng.Select
@@ -552,13 +552,13 @@ AssetBName = Split(AssetB.Value, Chr(181))(0)
 
 openPos = InStr(AssetB, Chr(181))
 closePos = InStr(AssetB, "%")
-AssetBReturn = Mid(AssetB, openPos + 2, closePos - openPos - 2)
+AssetBReturn = Mid(AssetB, openPos + 2, closePos - openPos - 2) / 100
 
 openPos = InStr(1, AssetB, "=")
 openPos = InStr(openPos + 1, AssetB, "=")
 closePos = InStr(1, AssetB, "%")
 closePos = InStr(closePos + 1, AssetB, "%")
-AssetBStD = Mid(AssetB, openPos + 1, closePos - openPos - 2)
+AssetBStD = Mid(AssetB, openPos + 1, closePos - openPos - 2) / 100
 
 Sheets.Add.Name = "Portfolio"
 
@@ -585,8 +585,8 @@ Range("D1").Value = "Portfolio StDev"
 For i = 1 To 11
     AWeight = Range("A1").Offset(i, 0).Value
     BWeight = Range("B1").Offset(i, 0).Value
-    PortfolioReturn = ((AWeight * AssetAReturn) + (BWeight * AssetBReturn)) / 100
-    PortfolioStdDev = Sqr(((AWeight * AssetAStD) ^ 2) + ((BWeight * AssetBStD) ^ 2) + (2 * AWeight * BWeight * MainRng.Value * AssetAStD * AssetBStD)) / 100
+    PortfolioReturn = ((AWeight * AssetAReturn) + (BWeight * AssetBReturn))
+    PortfolioStdDev = Sqr(((AWeight * AssetAStD) ^ 2) + ((BWeight * AssetBStD) ^ 2) + (2 * AWeight * BWeight * MainRng.Value * AssetAStD * AssetBStD))
     Range("C1").Offset(i, 0).Value = PortfolioReturn
     Range("D1").Offset(i, 0).Value = PortfolioStdDev
 Next
@@ -607,14 +607,14 @@ Range("E6").Value = "Corr"
 
 Range("F1").Value = AssetAName
 Range("F2").Value = AssetAReturn
-Range("F3").Value = (AssetAStD * AssetAStD)
+Range("F3").Value = (AssetAStD ^ 2)
 Range("F4").Value = AssetAStD
 Range("F5").Value = MainRng.Value / (AssetAStD * AssetBStD)
 Range("F6").Value = MainRng.Value
 
 Range("G1").Value = AssetBName
 Range("G2").Value = AssetBReturn
-Range("G3").Value = (AssetBStD * AssetBStD)
+Range("G3").Value = (AssetBStD ^ 2)
 Range("G4").Value = AssetBStD
 Range("G5").Value = MainRng.Value / (AssetAStD * AssetBStD)
 Range("G6").Value = MainRng.Value
@@ -659,9 +659,9 @@ AReturn = Range("F2").Value
 AVar = Range("F3").Value
 AStDev = Range("F4").Value
 
-BReturn = Range("F2").Value
-BVar = Range("F3").Value
-BStDev = Range("F4").Value
+BReturn = Range("G2").Value
+BVar = Range("G3").Value
+BStDev = Range("G4").Value
 
 AOptimalW = (((AReturn - riskFreeRate) * BVar) - ((BReturn - riskFreeRate) * CovAB)) / ((((AReturn - riskFreeRate) * BVar) + ((BReturn - riskFreeRate) * AVar)) - ((AReturn - riskFreeRate + BReturn - riskFreeRate) * CovAB))
 BOptimalW = 1 - AOptimalW
@@ -676,14 +676,7 @@ Set OptimalRng = Selection
 OptimalRng.Value = AOptimalW
 OptimalRng.Offset(0, 1).Value = BOptimalW
 OptimalRng.Offset(0, 2).Value = PortfolioReturn
-PortfolioStdDev
-
-
-
-
-
-
-
+OptimalRng.Offset(0, 3).Value = PortfolioStdDev
 
 
 End Function
