@@ -95,18 +95,25 @@ For FileNumber = 1 To Count 'you can change count to a constant for sample runs
 Next FileNumber
 
 Worksheets("PathSet").Delete
-MainWB.Sheets.Add.Name = MonthSummary
-MainWB.Sheets.Add.Name = DaySummary
+MainWB.Sheets.Add.Name = "MonthSummary"
+MainWB.Sheets.Add.Name = "DailySummary"
+
+Worksheets("DailySummary").Activate
+Range("A1").Value = "Ticker"
+Range("A2").Value = "Average"
+Range("A3").Value = "Variance"
+Range("A4").Value = "StrdDev"
 
 For Each CurrentSheet In Worksheets
     If InStr(1, CurrentSheet.Name, "(Mon)") > 0 Then
         CurrentSheet.Activate
-        Set SheetName = CurrentSheet.Name
+        SheetName = CurrentSheet.Name
         Call dailySummary(SheetName)
         CurrentSheet.Activate
+    End If
     If InStr(1, CurrentSheet.Name, "(D)") > 0 Then
         CurrentSheet.Activate
-        Set SheetName = CurrentSheet.Name
+        SheetName = CurrentSheet.Name
         Call monthlySummary(SheetName)
         CurrentSheet.Activate
     End If
@@ -309,9 +316,53 @@ Next
 
 End Function
 Function dailySummary(SheetName As String)
-    
 
+'find intraday %
+'move one cell down
+'select to bottom of content
+'selection equals usableData
+'get summary stats on usable data
+'worksheet dailySummary select
+    
 End Function
 Function monthlySummary(SheetName As String)
+
+    Dim useableData As Range
+    Dim MonthlyArithmeticMean, MonthlyStandardDeviation, MonthlyVariance As Double
+    
+    
+'find "Sum of Intraday"
+
+    Cells.Find(What:="Sum of Intraday", After:=ActiveCell, LookIn:=xlFormulas _
+        , LookAt:=xlPart, SearchOrder:=xlByRows, SearchDirection:=xlNext, _
+        MatchCase:=False, SearchFormat:=False).Activate
+
+'select data beneath
+    
+    Selection.Offset(1, 0).Select
+    Range(Selection, Selection.End(xlDown)).Select
+    
+'selection equals usableData
+    Set useableData = Selection
+
+    MonthlyArithmeticMean = Application.WorksheetFunction.Average(useableData)
+    MonthlyStandardDeviation = Application.WorksheetFunction.StDev_P(useableData)
+    MonthlyVariance = MonthlyStandardDeviation * MonthlyStandardDeviation
+
+'worksheet dailySummary select
+    Worksheets("DailySummary").Activate
+    Range("A1").Select
+    If IsEmpty(Range("A1").Offset(0, 1)) Then
+        Range("B1").Select
+    Else
+        'Move right
+        'Move one cell right
+    End If
+    
+    ActiveCell.Value = SheetName
+    
+    ActiveCell.Offset(1, 0).Value = MonthlyArithmeticMean
+    ActiveCell.Offset(2, 0).Value = MonthlyStandardDeviation
+    ActiveCell.Offset(3, 0).Value = MonthlyVariance
 
 End Function
