@@ -405,7 +405,8 @@ For Each Basesheet In Worksheets
         'paste stats into monthsummary
             
             Worksheets("MonthlyCorr").Select
-            str = Split(Basesheet.Name, "(")(0) & " " & Chr(181) & "=" & Format(BaseArithmeticMean, "Percent") & " " & ChrW(&H3C3) & "=" & Format(BaseStandardDeviation, "Percent")
+            str = Split(Basesheet.Name, "(")(0) & vbNewLine & Chr(181) & "=" & Format(BaseArithmeticMean, "Percent") & " " & ChrW(&H3C3) & "=" & Format(BaseStandardDeviation, "Percent")
+            topCell.Offset(0, countx).WrapText = True
             topCell.Offset(0, countx).Value = str
             
 
@@ -440,7 +441,7 @@ For Each Basesheet In Worksheets
                                 Worksheets("MonthlyCorr").Select
                                 
                             'paste corrData name in row
-                                str = Split(CurrentSheet.Name, "(")(0) & " " & Chr(181) & "=" & Format(TrgtArithmeticMean, "Percent") & " " & ChrW(&H3C3) & "=" & Format(TrgtStandardDeviation, "Percent")
+                                str = Split(CurrentSheet.Name, "(")(0) & vbNewLine & Chr(181) & "=" & Format(TrgtArithmeticMean, "Percent") & " " & ChrW(&H3C3) & "=" & Format(TrgtStandardDeviation, "Percent")
                                 topCell.Offset(county, 0).Value = str
                                 
                             'paste correlation
@@ -455,8 +456,58 @@ For Each Basesheet In Worksheets
     End If
 Next
 Worksheets("MonthlyCorr").Activate
+
+'center first column and row
+Rows("1:1").Select
+    With Selection
+        .HorizontalAlignment = xlCenter
+    End With
+Columns("A:A").Select
+    With Selection
+        .HorizontalAlignment = xlCenter
+    End With
+    
+'format numbers and cells
+Range("B2").Select
+Range(Selection, Selection.End(xlDown)).Select
+Range(Selection, Selection.End(xlToRight)).Select
+Selection.NumberFormat = "0.00"
+With Selection
+    .HorizontalAlignment = xlCenter
+    .VerticalAlignment = xlCenter
+End With
+
+'heat map
+    Selection.FormatConditions.AddColorScale ColorScaleType:=3
+    Selection.FormatConditions(Selection.FormatConditions.count).SetFirstPriority
+    Selection.FormatConditions(1).ColorScaleCriteria(1).Type = _
+        xlConditionValueNumber
+    Selection.FormatConditions(1).ColorScaleCriteria(1).Value = -1
+    With Selection.FormatConditions(1).ColorScaleCriteria(1).FormatColor
+        .Color = 7039480
+        .TintAndShade = 0
+    End With
+    Selection.FormatConditions(1).ColorScaleCriteria(2).Type = _
+        xlConditionValueNumber
+    Selection.FormatConditions(1).ColorScaleCriteria(2).Value = 0
+    With Selection.FormatConditions(1).ColorScaleCriteria(2).FormatColor
+        .ThemeColor = xlThemeColorDark1
+        .TintAndShade = 0
+    End With
+    Selection.FormatConditions(1).ColorScaleCriteria(3).Type = _
+        xlConditionValueNumber
+    Selection.FormatConditions(1).ColorScaleCriteria(3).Value = 1
+    With Selection.FormatConditions(1).ColorScaleCriteria(3).FormatColor
+        .Color = 8109667
+        .TintAndShade = 0
+    End With
+
+'autofit rows and cols
 Cells.Select
 Cells.EntireColumn.AutoFit
+Cells.EntireRow.AutoFit
+
+'reset selectio
 Range("A1").Select
 
 End Function
