@@ -13,6 +13,9 @@ Dim StartTime As Double
 Dim SecondsElapsed As Double
 Dim tickersPerSec As Double
 Dim SummaryRng As Range
+Dim CurrentSheet As Worksheet
+Dim SheetName As String
+
 
 StartTime = Timer
 
@@ -92,6 +95,22 @@ For FileNumber = 1 To Count 'you can change count to a constant for sample runs
 Next FileNumber
 
 Worksheets("PathSet").Delete
+MainWB.Sheets.Add.Name = MonthSummary
+MainWB.Sheets.Add.Name = DaySummary
+
+For Each CurrentSheet In Worksheets
+    If InStr(1, CurrentSheet.Name, "(Mon)") > 0 Then
+        CurrentSheet.Activate
+        Set SheetName = CurrentSheet.Name
+        Call dailySummary(SheetName)
+        CurrentSheet.Activate
+    If InStr(1, CurrentSheet.Name, "(D)") > 0 Then
+        CurrentSheet.Activate
+        Set SheetName = CurrentSheet.Name
+        Call monthlySummary(SheetName)
+        CurrentSheet.Activate
+    End If
+Next
                                         
 'tell me how long it took
 SecondsElapsed = Round(Timer - StartTime, 2)
@@ -287,5 +306,12 @@ Next
 're-center A1
     Range("A1").Select
     
+
+End Function
+Function dailySummary(SheetName As String)
+    
+
+End Function
+Function monthlySummary(SheetName As String)
 
 End Function
