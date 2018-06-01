@@ -107,7 +107,7 @@ Range("A4").Value = "StrdDev"
 For Each CurrentSheet In Worksheets
     If InStr(1, CurrentSheet.Name, "(Mon)") > 0 Then
         CurrentSheet.Activate
-        SheetName = CurrentSheet.Name
+        SheetName = Split(CurrentSheet.Name, "(")(0)
         Call monthlySummary(SheetName)
         CurrentSheet.Activate
     End If
