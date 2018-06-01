@@ -585,7 +585,7 @@ Range("D1").Value = "Portfolio StDev"
 For i = 1 To 11
     AWeight = Range("A1").Offset(i, 0).Value
     BWeight = Range("B1").Offset(i, 0).Value
-    PortfolioReturn = (AWeight * AssetAReturn) + (BWeight * AssetBReturn) / 100
+    PortfolioReturn = ((AWeight * AssetAReturn) + (BWeight * AssetBReturn)) / 100
     PortfolioStdDev = Sqr(((AWeight * AssetAStD) ^ 2) + ((BWeight * AssetBStD) ^ 2) + (2 * AWeight * BWeight * MainRng.Value * AssetAStD * AssetBStD)) / 100
     Range("C1").Offset(i, 0).Value = PortfolioReturn
     Range("D1").Offset(i, 0).Value = PortfolioStdDev
@@ -602,6 +602,18 @@ DataRowCount = Selection.Rows.count
     ActiveChart.SeriesCollection.NewSeries
     ActiveChart.FullSeriesCollection(1).XValues = "=Portfolio!$D$2:$D$" & DataRowCount
     ActiveChart.FullSeriesCollection(1).Values = "=Portfolio!$C$2:$C$" & DataRowCount
-    ActiveChart.ChartTitle.Delete
+    ActiveChart.HasTitle = True
+    ActiveChart.ChartTitle.Text = "Efficient Frontier"
+    With ActiveChart.Axes(xlValue)
+     .HasTitle = True
+     With .AxisTitle
+     .Caption = "Portfolio Return"
+     End With
+    End With
+    With ActiveChart.Axes(xlCategory)
+     .HasTitle = True
+     .AxisTitle.Caption = "Portfolio StDev"
+    End With
+    
 End Function
 
