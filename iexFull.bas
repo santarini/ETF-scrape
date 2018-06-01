@@ -562,8 +562,8 @@ AssetBStD = Mid(AssetB, openPos + 1, closePos - openPos - 2)
 
 Sheets.Add.Name = "Portfolio"
 
-Range("A1").Value = "Asset A Weight"
-Range("B1").Value = "Asset B Weight"
+Range("A1").Value = AssetAName & " Weight"
+Range("B1").Value = AssetBName & " Weight"
 
 j = 1
 k = 0
