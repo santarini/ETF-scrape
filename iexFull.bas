@@ -516,14 +516,15 @@ Set HeaderRng = Selection
 For Each cell In HeaderRng
 openPos = InStr(cell, "=")
 closePos = InStr(cell, "%")
-AssetBReturn = Mid(cell, openPos + 1, closePos - openPos - 1)
-If AssetBReturn <= 0 Then
-    cell.Font.Color = RGB(255, 0, 0)
+AssetReturn = Mid(cell, openPos + 1, closePos - openPos - 1)
+If AssetReturn <= 0 Then
+    cell.Characters(openPos + 1, closePos - openPos - 1).Font.Color = RGB(255, 0, 0)
 End If
 
-If AssetBReturn >= 0 Then
-    cell.Font.Color = RGB(0, 255, 0)
+If AssetReturn >= 0 Then
+    cell.Characters(openPos + 1, closePos - openPos - 1).Font.Color = RGB(0, 190, 0)
 End If
+Next
 
 Next
 
@@ -534,13 +535,13 @@ Set HeaderRng = Selection
 For Each cell In HeaderRng
 openPos = InStr(cell, "=")
 closePos = InStr(cell, "%")
-AssetBReturn = Mid(cell, openPos + 1, closePos - openPos - 1)
-If AssetBReturn <= 0 Then
-    cell.Font.Color = RGB(255, 0, 0)
+AssetReturn = Mid(cell, openPos + 1, closePos - openPos - 1)
+If AssetReturn <= 0 Then
+    cell.Characters(openPos + 1, closePos - openPos - 1).Font.Color = RGB(255, 0, 0)
 End If
 
-If AssetBReturn >= 0 Then
-    cell.Font.Color = RGB(0, 190, 0)
+If AssetReturn >= 0 Then
+    cell.Characters(openPos + 1, closePos - openPos - 1).Font.Color = RGB(0, 190, 0)
 End If
 Next
 
