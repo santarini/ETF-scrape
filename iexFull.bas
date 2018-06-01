@@ -607,12 +607,12 @@ DataRowCount = Selection.Rows.count
     With ActiveChart.Axes(xlValue)
      .HasTitle = True
      With .AxisTitle
-     .Caption = "Portfolio Return"
+     .Caption = "Portfolio " & Chr(181)
      End With
     End With
     With ActiveChart.Axes(xlCategory)
      .HasTitle = True
-     .AxisTitle.Caption = "Portfolio StDev"
+     .AxisTitle.Caption = "Portfolio " & ChrW(&H3C3)
     End With
     
 End Function
