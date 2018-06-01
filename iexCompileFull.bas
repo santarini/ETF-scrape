@@ -34,11 +34,11 @@ PathCountCondition = FolderPath & "\*.csv"
 FileName = Dir(PathCountCondition)
 
 Do While FileName <> ""
-    Count = Count + 1
-    FileName = Dir()
     Rng.Value = FileName
     Rng.Offset(1, 0).Select
+    Count = Count + 1
     Set Rng = ActiveCell
+    FileName = Dir()
 Loop
 
 Worksheets("PathSet").Activate
@@ -154,5 +154,10 @@ Function manipulateDataIEX()
     Range("I:I").Select
     Selection.Style = "Percent"
     Selection.NumberFormat = "0.000%"
+    
+    
+    'resize one last time
+    Range("A:I").Select
+    Selection.Columns.AutoFit
    
 End Function
