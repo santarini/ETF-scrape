@@ -532,13 +532,13 @@ AssetAName = Split(AssetA.Value, Chr(181))(0)
 
 openPos = InStr(AssetA, Chr(181))
 closePos = InStr(AssetA, "%")
-AssetAReturn = Mid(AssetA, openPos + 2, closePos - openPos - 1)
+AssetAReturn = Mid(AssetA, openPos + 2, closePos - openPos - 2)
 
 openPos = InStr(1, AssetA, "=")
 openPos = InStr(openPos + 1, AssetA, "=")
 closePos = InStr(1, AssetA, "%")
 closePos = InStr(closePos + 1, AssetA, "%")
-AssetAStD = Mid(AssetA, openPos + 1, closePos - openPos - 1)
+AssetAStD = Mid(AssetA, openPos + 1, closePos - openPos - 2)
 
 
 MainRng.Select
@@ -552,13 +552,13 @@ AssetBName = Split(AssetB.Value, Chr(181))(0)
 
 openPos = InStr(AssetB, Chr(181))
 closePos = InStr(AssetB, "%")
-AssetBReturn = Mid(AssetB, openPos + 2, closePos - openPos - 1)
+AssetBReturn = Mid(AssetB, openPos + 2, closePos - openPos - 2)
 
 openPos = InStr(1, AssetB, "=")
 openPos = InStr(openPos + 1, AssetB, "=")
 closePos = InStr(1, AssetB, "%")
 closePos = InStr(closePos + 1, AssetB, "%")
-AssetBStD = Mid(AssetB, openPos + 1, closePos - openPos - 1)
+AssetBStD = Mid(AssetB, openPos + 1, closePos - openPos - 2)
 
 Sheets.Add.Name = "Portfolio"
 
@@ -585,11 +585,12 @@ Range("D1").Value = "Portfolio StDev"
 For i = 1 To 11
     AWeight = Range("A1").Offset(i, 0).Value
     BWeight = Range("B1").Offset(i, 0).Value
-    PortfolioReturn = (AWeight * AssetBReturn) + (BWeight * AssetBReturn)
+    PortfolioReturn = (AWeight * AssetAReturn) + (BWeight * AssetBReturn)
     PortfolioStdDev = ((AWeight * AssetAStD) ^ 2) + ((BWeight * AssetBStD) ^ 2) + (2 * AWeight * BWeight * MainRng.Value * AssetAStD * AssetBStD)
-    Range("C1").Offset(0, i).Value = PortfolioReturn
-    Range("D1").Offset(0, i).Value = PortfolioStdDev
+    Range("C1").Offset(i, 0).Value = PortfolioReturn
+    Range("D1").Offset(i, 0).Value = PortfolioStdDev
 Next
 
 
 End Function
+
