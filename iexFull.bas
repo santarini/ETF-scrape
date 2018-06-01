@@ -652,15 +652,16 @@ Columns("A:B").Delete
      .HasTitle = True
      .AxisTitle.Caption = "Portfolio " & ChrW(&H3C3)
     End With
-    ActiveSheet.ChartObjects("Chart 1").Activate
+    
     ActiveChart.FullSeriesCollection(1).Select
     ActiveChart.SetElement (msoElementDataLabelTop)
+    ActiveSheet.ChartObjects("Chart 1").Activate
 
-    
     ActiveChart.FullSeriesCollection(1).DataLabels.Select
     ActiveChart.SeriesCollection(1).DataLabels.Format.TextFrame2.TextRange. _
-        InsertChartField msoChartFieldRange, "=Portfolio!$A$2:$A$" & (DataRowCount + 1), 0
+        InsertChartField msoChartFieldRange, "=Portfolio!$A$2:$A$12", 0
     Selection.ShowRange = True
+    Selection.ShowValue = False
     
 Cells.Select
 Selection.Columns.AutoFit
