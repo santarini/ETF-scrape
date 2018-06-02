@@ -785,6 +785,15 @@ Function CapitalAllocationLine()
 Range("A1").Select
 Selection.End(xlDown).Select
 Set OptimalRng = Selection
+OptimalReturn = OptimalRng.Offset(0, 3)
+OptimalStDev = OptimalRng.Offset(0, 4)
+
+
+Cells.Find(What:="Individual Stats", After:=ActiveCell, LookIn:= _
+    xlFormulas, LookAt:=xlPart, SearchOrder:=xlByRows, SearchDirection:= _
+    xlNext, MatchCase:=False, SearchFormat:=False).Activate
+Selection.End(xlDown).Select
+riskFreeRate = Selection.Offset(0, 1)
 
 Range("I1").Value = "Risky Weight"
 Range("J1").Value = "RFR Weight"
@@ -792,11 +801,12 @@ Range("J1").Value = "RFR Weight"
 j = 1
 k = 0
 For i = 1 To 16
-    Range("K1").Offset(i, 0).Value = k
-    Range("L1").Offset(i, 0).Value = j
-    PortfolioReturn = ((k * AReturn) + (j * BReturn))
-    PortfolioStdDev = Sqr(((AOptimalW * AStDev) ^ 2) + ((BOptimalW * BStDev) ^ 2) + (2 * AOptimalW * BOptimalW * CorrAB * AStDev * BStDev))
-    
+    Range("I1").Offset(i, 0).Value = k
+    Range("J1").Offset(i, 0).Value = j
+    PortfolioReturn = ((k * OptimalReturn) + (j * riskFreeRate))
+    PortfolioStdDev = Sqr(((k * OptimalStDev) ^ 2))
+    Range("K1").Offset(i, 0).Value = PortfolioReturn
+    Range("L1").Offset(i, 0).Value = PortfolioStdDev
     j = j - 0.1
     k = k + 0.1
 Next
