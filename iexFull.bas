@@ -722,8 +722,8 @@ Dim OptimalRng As Range
 
 riskFreeRate = InputBox("What is the Risk Free Rate?", "Risk Free Rate of Return", 1)
 
-Range("F8").Value = "Risk Free Rate"
-Range("G8").Value = riskFreeRate
+Range("F7").Value = "Risk Free Rate"
+Range("G7").Value = riskFreeRate / 100
 
 CovAB = Range("G5").Value
 CorrAB = Range("G6").Value
@@ -800,7 +800,7 @@ Range("J1").Value = "RFR Weight"
 
 j = 1
 k = 0
-For i = 1 To 16
+For i = 1 To 17
     Range("I1").Offset(i, 0).Value = k
     Range("J1").Offset(i, 0).Value = j
     PortfolioReturn = ((k * OptimalReturn) + (j * riskFreeRate))
@@ -818,6 +818,18 @@ Selection.NumberFormat = "0%"
 
 Range("K1").Value = "Return Portfolio"
 Range("L1").Value = "Portfolio StDev"
+
+    ActiveChart.ChartArea.Select
+    Application.CutCopyMode = False
+    Application.CutCopyMode = False
+    ActiveChart.SeriesCollection.NewSeries
+    ActiveChart.FullSeriesCollection(4).XValues = "=Portfolio!$L$2:$L$18"
+    ActiveChart.FullSeriesCollection(4).Values = "=Portfolio!$K$2:$K$18"
+    ActiveChart.FullSeriesCollection(4).Select
+    Selection.MarkerStyle = -4142
+    ActiveChart.ChartArea.Select
+
+Range("A1").Select
 
 
 
