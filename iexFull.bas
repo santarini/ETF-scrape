@@ -696,7 +696,8 @@ Next
      .HasTitle = True
      .AxisTitle.Caption = "Portfolio " & ChrW(&H3C3)
     End With
-    
+    ActiveChart.Axes(xlValue).MajorUnit = 0.01
+    ActiveChart.Axes(xlValue).MinorUnit = 0.005
     ActiveChart.FullSeriesCollection(1).Select
     ActiveChart.SetElement (msoElementDataLabelTop)
     ActiveSheet.ChartObjects("Chart 1").Activate
@@ -804,7 +805,7 @@ For i = 1 To 17
     Range("I1").Offset(i, 0).Value = k
     Range("J1").Offset(i, 0).Value = j
     PortfolioReturn = ((k * OptimalReturn) + (j * riskFreeRate))
-    PortfolioStdDev = Sqr(((k * OptimalStDev) ^ 2))
+    PortfolioStdDev = (k * OptimalStDev)
     Range("K1").Offset(i, 0).Value = PortfolioReturn
     Range("L1").Offset(i, 0).Value = PortfolioStdDev
     j = j - 0.1
@@ -818,7 +819,7 @@ Selection.NumberFormat = "0%"
 
 Range("K1").Value = "Return Portfolio"
 Range("L1").Value = "Portfolio StDev"
-
+    ActiveSheet.ChartObjects("Chart 1").Activate
     ActiveChart.ChartArea.Select
     Application.CutCopyMode = False
     Application.CutCopyMode = False
